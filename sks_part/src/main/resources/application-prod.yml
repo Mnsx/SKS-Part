@@ -1,0 +1,8 @@
+spring:
+  rabbitmq:
+    host: 47.101.195.28
+  redis:
+    host: 47.101.195.28
+  datasource:
+    druid:
+      url: jdbc:mysql://47.101.195.28:3306/sks_part?useUnicode=true&characterEncoding=UTF-8&useSSL=false

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.mnsx.sks_part.dao.GoodDao">
+    <resultMap id="GoodEntityMap" type="top.mnsx.sks_part.entity.Good">
+        <id property="id" column="id"/>
+        <result property="stockCount" column="stock_count"/>
+    </resultMap>
+
+    <select id="selectStockCountById" resultType="int">
+        select
+            stock_count
+        from
+            t_good
+        where
+            id = #{id}
+    </select>
+</mapper>
