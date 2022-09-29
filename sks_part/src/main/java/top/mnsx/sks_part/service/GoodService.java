@@ -7,5 +7,7 @@ package top.mnsx.sks_part.service;
  * @Description:
  */
 public interface GoodService {
-    void getStockCount(Integer id);
+    Integer getStockCount(Integer id);
+
+    void updateStockCount(Integer id);
 }

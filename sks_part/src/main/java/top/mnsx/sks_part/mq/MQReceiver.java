@@ -8,6 +8,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.mnsx.sks_part.dao.OrderDao;
+import top.mnsx.sks_part.entity.Order;
+import top.mnsx.sks_part.service.GoodService;
+import top.mnsx.sks_part.service.OrderService;
 import top.mnsx.sks_part.utils.RedisUtil;
 
 /**
@@ -20,34 +23,38 @@ import top.mnsx.sks_part.utils.RedisUtil;
 @Slf4j
 public class MQReceiver {
     @Autowired
-    private OrderDao orderDao;
+    private OrderService orderService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private GoodService goodService;
 
     public static final String SKS_QUEUE = "sks.queue";
 
     @RabbitListener(queues=SKS_QUEUE)
     public void receive(String message) {
-        log.info("message" + message);
+        log.info("receive message" + message);
         SKSMessage sksMessage = JSON.parseObject(message, SKSMessage.class);
 
-        // 直接存入数据库中
-        /*Integer result = orderDao.insertOrder(sksMessage.getUserId(), sksMessage.getGoodsId());
-        if (result != 1) {
-            throw new RuntimeException();
-        }*/
-
-        if (isHasStockCount(sksMessage.getGoodsId())) {
-            reduceStockCount(sksMessage.getGoodsId());
+        Integer count = goodService.getStockCount(sksMessage.getGoodsId());
+        if (count < 0) {
+            return;
         }
-    }
 
-    public Boolean isHasStockCount(Integer id) {
-        return (!redisUtil.get(String.valueOf(id)).equals("0"));
-    }
+        // 直接存入数据库中
+        Order order = orderService.selectOrderByUserId(sksMessage.getUserId());
+        if (order != null) {
+            return;
+        }
 
-    public Boolean reduceStockCount(Integer id) {
-        Long decr = redisUtil.decr(String.valueOf(id), 1L);
-        return decr == 1;
+        orderService.insertOrder(sksMessage.getUserId(), sksMessage.getGoodsId());
+
+        goodService.updateStockCount(sksMessage.getGoodsId());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

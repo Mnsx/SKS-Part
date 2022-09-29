@@ -20,10 +20,11 @@ public class MQSender {
 	RabbitTemplate rabbitTemplate;
 
 	public static final String SKS_QUEUE = "sks.queue";
+	public static final String SKS_EXCHANGE = "sks.change";
 
 	public void sendSKSMessage(SKSMessage msg) {
 		String json = JSON.toJSONString(msg);
-		rabbitTemplate.convertAndSend(SKS_QUEUE, json);
+		rabbitTemplate.convertAndSend(SKS_EXCHANGE, "EQ", json);
 	}
 
 }

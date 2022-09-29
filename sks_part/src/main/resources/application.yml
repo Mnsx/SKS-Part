@@ -20,7 +20,7 @@ spring:
     virtual-host: center
 
   profiles:
-    active: prod
+    active: dev
 
 mybatis:
   mapper-locations: classpath:mybatis/dao/*.xml

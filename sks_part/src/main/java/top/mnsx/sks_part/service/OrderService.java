@@ -1,5 +1,7 @@
 package top.mnsx.sks_part.service;
 
+import top.mnsx.sks_part.entity.Order;
+
 /**
  * @BelongsProject: sks_part
  * @User: Mnsx_x
@@ -7,5 +9,7 @@ package top.mnsx.sks_part.service;
  * @Description:
  */
 public interface OrderService {
-    void insertOrder(Integer userId, Integer goodId);
+    Order insertOrder(Integer userId, Integer goodId);
+
+    Order selectOrderByUserId(Integer userId);
 }

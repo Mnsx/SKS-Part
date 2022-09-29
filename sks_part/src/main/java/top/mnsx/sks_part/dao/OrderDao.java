@@ -2,6 +2,7 @@ package top.mnsx.sks_part.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import top.mnsx.sks_part.entity.Order;
 
 /**
  * @BelongsProject: sks_part
@@ -12,4 +13,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface OrderDao {
     Integer insertOrder(@Param("userId") Integer userId, @Param("goodId") Integer goodId);
+
+    Order selectOrderByUserId(@Param("userId") Integer userId);
 }

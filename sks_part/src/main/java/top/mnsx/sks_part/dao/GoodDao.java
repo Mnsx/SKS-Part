@@ -12,4 +12,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface GoodDao {
     Integer selectStockCountById(@Param("id") Integer id);
+
+    Integer updateStockCount(@Param("id") Integer id);
 }

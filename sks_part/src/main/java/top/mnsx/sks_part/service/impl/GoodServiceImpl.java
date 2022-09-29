@@ -22,11 +22,17 @@ public class GoodServiceImpl implements GoodService {
     private RedisUtil redisUtil;
 
     @Override
-    public void getStockCount(Integer id) {
+    public Integer getStockCount(Integer id) {
         Integer result = goodDao.selectStockCountById(id);
 
-        redisUtil.set(String.valueOf(id),String.valueOf(result));
+        return result;
     }
 
-
+    @Override
+    public void updateStockCount(Integer id) {
+        Integer result = goodDao.updateStockCount(id);
+        if (result != 1) {
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        }
+    }
 }
